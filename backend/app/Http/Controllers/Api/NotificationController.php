@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Notification;
 use App\Support\Audit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,27 +15,26 @@ class NotificationController extends Controller
     {
         $user = $request->user();
         
-        $notifications = DB::table('notifications')
-            ->where('user_id', $user->id)
-            ->orWhere('role', $user->role)
+        $notifications = Notification::where(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                      ->orWhere('role', $user->role);
+            })
             ->orderBy('created_at', 'desc')
             ->limit(50)
             ->get();
 
         return response()->json([
             'notifications' => $notifications,
-            'unread_count' => DB::table('notifications')
-                ->where('user_id', $user->id)
-                ->where('read_at', null)
+            'unread_count' => Notification::where('user_id', $user->id)
+                ->whereNull('read_at')
                 ->count()
         ]);
     }
 
     public function markAsRead($id)
     {
-        DB::table('notifications')
-            ->where('id', $id)
-            ->update(['read_at' => now()]);
+        $notification = Notification::findOrFail($id);
+        $notification->markAsRead();
 
         return response()->json([
             'message' => 'Notification marked as read'
@@ -45,8 +45,7 @@ class NotificationController extends Controller
     {
         $user = $request->user();
         
-        DB::table('notifications')
-            ->where('user_id', $user->id)
+        Notification::where('user_id', $user->id)
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
 
@@ -75,14 +74,13 @@ class NotificationController extends Controller
             'title' => $request->title,
             'message' => $request->message,
             'type' => $request->type,
-            'created_at' => now(),
         ];
 
         if ($request->target_role === 'all') {
             // Send to all users
             $users = User::pluck('id');
             foreach ($users as $userId) {
-                DB::table('notifications')->insert(array_merge($notificationData, [
+                Notification::create(array_merge($notificationData, [
                     'user_id' => $userId,
                 ]));
             }
@@ -90,13 +88,13 @@ class NotificationController extends Controller
             // Send to specific role
             $users = User::where('role', $request->target_role)->pluck('id');
             foreach ($users as $userId) {
-                DB::table('notifications')->insert(array_merge($notificationData, [
+                Notification::create(array_merge($notificationData, [
                     'user_id' => $userId,
                 ]));
             }
         } else {
             // Send to specific user
-            DB::table('notifications')->insert(array_merge($notificationData, [
+            Notification::create(array_merge($notificationData, [
                 'user_id' => $request->user_id,
             ]));
         }
@@ -115,8 +113,7 @@ class NotificationController extends Controller
     {
         $user = $request->user();
         
-        $count = DB::table('notifications')
-            ->where('user_id', $user->id)
+        $count = Notification::where('user_id', $user->id)
             ->whereNull('read_at')
             ->count();
 
@@ -127,9 +124,8 @@ class NotificationController extends Controller
 
     public function deleteNotification($id)
     {
-        DB::table('notifications')
-            ->where('id', $id)
-            ->delete();
+        $notification = Notification::findOrFail($id);
+        $notification->delete();
 
         return response()->json([
             'message' => 'Notification deleted successfully'
@@ -138,9 +134,10 @@ class NotificationController extends Controller
 
     public function getSystemNotifications(Request $request)
     {
-        $notifications = DB::table('notifications')
-            ->where('user_id', null) // System-wide notifications
-            ->orWhere('role', $request->user()->role)
+        $notifications = Notification::where(function ($query) use ($request) {
+                $query->whereNull('user_id') // System-wide notifications
+                      ->orWhere('role', $request->user()->role);
+            })
             ->orderBy('created_at', 'desc')
             ->limit(20)
             ->get();

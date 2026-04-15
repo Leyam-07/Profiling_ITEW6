@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Event;
 use App\Models\StudentNonAcademicHistory;
 use App\Support\Audit;
+use App\Support\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -57,6 +58,13 @@ class EventController extends Controller
             'event_id' => $event->id,
             'event_name' => $event->event_name
         ]);
+
+        // Notify all students about the new event
+        NotificationService::notifyNewEvent(
+            $event->event_name,
+            $event->category,
+            $request->description
+        );
 
         return response()->json([
             'message' => 'Event created successfully',
@@ -193,6 +201,12 @@ class EventController extends Controller
             'event_id' => $request->event_id,
             'student_id' => $studentId
         ]);
+
+        // Notify student about event registration
+        $event = Event::find($request->event_id);
+        if ($event) {
+            NotificationService::notifyEventRegistration($studentId, $event->event_name, true);
+        }
 
         return response()->json([
             'message' => 'Student registered for event successfully'

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 27, 2026 at 03:56 AM
+-- Generation Time: Apr 15, 2026 at 08:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,7 +42,30 @@ CREATE TABLE `audit_logs` (
 --
 
 INSERT INTO `audit_logs` (`id`, `action`, `actor_role`, `actor_id`, `meta`, `created_at`, `updated_at`) VALUES
-(1, 'login', 'student', 7, NULL, '2026-03-26 18:54:13', '2026-03-26 18:54:13');
+(1, 'login', 'student', 7, NULL, '2026-03-26 18:54:13', '2026-03-26 18:54:13'),
+(2, 'logout', 'student', 7, NULL, '2026-03-26 23:09:56', '2026-03-26 23:09:56'),
+(3, 'login', 'dean', 1, NULL, '2026-03-26 23:11:03', '2026-03-26 23:11:03'),
+(4, 'logout', 'dean', 1, NULL, '2026-03-26 23:11:33', '2026-03-26 23:11:33'),
+(5, 'login', 'faculty', 2, NULL, '2026-03-26 23:12:40', '2026-03-26 23:12:40'),
+(6, 'login', 'faculty', 2, NULL, '2026-03-26 23:13:25', '2026-03-26 23:13:25'),
+(7, 'logout', 'faculty', 2, NULL, '2026-03-26 23:13:30', '2026-03-26 23:13:30'),
+(8, 'login', 'faculty', 2, NULL, '2026-03-26 23:13:46', '2026-03-26 23:13:46'),
+(9, 'logout', 'faculty', 2, NULL, '2026-03-26 23:15:21', '2026-03-26 23:15:21'),
+(10, 'login', 'student', 7, NULL, '2026-03-26 23:15:57', '2026-03-26 23:15:57'),
+(11, 'logout', 'student', 7, NULL, '2026-03-26 23:24:48', '2026-03-26 23:24:48'),
+(12, 'login', 'dean', 1, NULL, '2026-03-26 23:25:12', '2026-03-26 23:25:12'),
+(13, 'logout', 'dean', 1, NULL, '2026-03-26 23:25:32', '2026-03-26 23:25:32'),
+(14, 'login', 'dean', 1, NULL, '2026-03-26 23:25:41', '2026-03-26 23:25:41'),
+(15, 'export_report', 'dean', 1, '{\"type\":\"enrollment\",\"count\":1}', '2026-03-26 23:27:35', '2026-03-26 23:27:35'),
+(16, 'export_report', 'dean', 1, '{\"type\":\"students\",\"count\":1}', '2026-03-26 23:27:37', '2026-03-26 23:27:37'),
+(17, 'logout', 'dean', 1, NULL, '2026-03-26 23:27:44', '2026-03-26 23:27:44'),
+(18, 'login', 'faculty', 2, NULL, '2026-03-26 23:27:58', '2026-03-26 23:27:58'),
+(19, 'login', 'dean', 1, NULL, '2026-04-07 23:31:45', '2026-04-07 23:31:45'),
+(20, 'login', 'student', 7, NULL, '2026-04-14 22:06:38', '2026-04-14 22:06:38'),
+(21, 'logout', 'student', 7, NULL, '2026-04-14 22:06:49', '2026-04-14 22:06:49'),
+(22, 'login', 'dean', 1, NULL, '2026-04-14 22:07:04', '2026-04-14 22:07:04'),
+(23, 'logout', 'dean', 1, NULL, '2026-04-14 22:15:11', '2026-04-14 22:15:11'),
+(24, 'login', 'student', 7, NULL, '2026-04-14 22:15:30', '2026-04-14 22:15:30');
 
 -- --------------------------------------------------------
 
@@ -151,7 +174,8 @@ INSERT INTO `events` (`id`, `event_name`, `category`, `required_skill`, `require
 (1, 'Intramurals Basketball Tournament', 'sports', 'Basketball', 2.00, '2026-04-11', 'University Gymnasium', 'Annual basketball tournament for all departments', '2026-03-26 18:53:49', '2026-03-26 18:53:49'),
 (2, 'Programming Hackathon 2026', 'academic', 'Programming', 2.50, '2026-04-26', 'Computer Laboratory', '24-hour coding competition', '2026-03-26 18:53:49', '2026-03-26 18:53:49'),
 (3, 'Leadership Summit', 'cultural', 'Leadership', 2.00, '2026-05-11', 'Conference Hall', 'Student leadership development program', '2026-03-26 18:53:49', '2026-03-26 18:53:49'),
-(4, 'Web Design Competition', 'academic', 'Web Development', 2.50, '2026-05-26', 'IT Building', 'Showcase your web design skills', '2026-03-26 18:53:49', '2026-03-26 18:53:49');
+(4, 'Web Design Competition', 'academic', 'Web Development', 2.50, '2026-05-26', 'IT Building', 'Showcase your web design skills', '2026-03-26 18:53:49', '2026-03-26 18:53:49'),
+(5, 'Basketball Tournament', 'sports', NULL, NULL, '2026-04-22', 'University Gym', 'Annual inter-department basketball competition', '2026-04-15 06:15:07', '2026-04-15 06:15:07');
 
 -- --------------------------------------------------------
 
@@ -304,7 +328,36 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (23, '2026_03_20_000017_add_schedule_fields_to_faculty_assignments', 1),
 (24, '2026_03_20_000017_add_schedule_fields_to_faculty_assignments_table', 1),
 (25, '2026_03_20_000018_add_user_identifiers', 1),
-(26, '2026_03_22_000001_add_avatar_path_to_users_table', 1);
+(26, '2026_03_22_000001_add_avatar_path_to_users_table', 1),
+(27, '2026_03_23_000001_create_notifications_table', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `role` enum('dean','faculty','student') DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `type` enum('info','warning','error','success') NOT NULL DEFAULT 'info',
+  `read_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `user_id`, `role`, `title`, `message`, `type`, `read_at`, `created_at`, `updated_at`) VALUES
+(1, 1, NULL, 'New Event Available', 'A new Academic event has been created: Programming Competition. Register now!', 'info', NULL, '2026-04-15 06:10:26', '2026-04-15 06:10:26'),
+(2, 1, NULL, 'Grade Posted', 'Your grade for Web Development has been posted: 1.5 (Excellent)', 'success', NULL, '2026-04-15 06:05:26', '2026-04-15 06:05:26'),
+(3, 1, NULL, 'Violation Notice', 'A minor violation has been recorded: Late Submission. Please contact the Dean\'s office.', 'warning', NULL, '2026-04-15 05:55:26', '2026-04-15 05:55:26'),
+(4, 7, NULL, 'New Event Available', 'A new sports event has been created: Basketball Tournament. Annual inter-department basketball competition', 'info', '2026-04-14 22:15:55', '2026-04-15 06:15:07', '2026-04-14 22:15:55');
 
 -- --------------------------------------------------------
 
@@ -342,7 +395,10 @@ CREATE TABLE `personal_access_tokens` (
 --
 
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
-(1, 'App\\Models\\User', 7, 'web', '286acfcc6bbcacc2caa94014a12f54d0c2c72770c42686cb8248dca418d2d2df', '[\"*\"]', '2026-03-26 18:56:34', NULL, '2026-03-26 18:54:13', '2026-03-26 18:56:34');
+(3, 'App\\Models\\User', 2, 'web', '85adb000405346971526ef3fd69d2fcfb54abd769a55cbdd020ee1fcc38fc8ac', '[\"*\"]', '2026-03-26 23:12:44', NULL, '2026-03-26 23:12:40', '2026-03-26 23:12:44'),
+(9, 'App\\Models\\User', 2, 'web', '5423ae8424817c3413af465ad0a769abc0f27a753b5c848334658925c2ff9276', '[\"*\"]', '2026-03-26 23:29:28', NULL, '2026-03-26 23:27:58', '2026-03-26 23:29:28'),
+(10, 'App\\Models\\User', 1, 'web', 'd17e5e218264d713cd8b0a7cdadfdd77998b91eefd8b344542df6ce3f6dad011', '[\"*\"]', '2026-04-11 04:33:33', NULL, '2026-04-07 23:31:45', '2026-04-11 04:33:33'),
+(13, 'App\\Models\\User', 7, 'web', '24f513ed926ff9f9749da675c4af8d992976e5757d3cbaed9986b4d0bf830b2c', '[\"*\"]', '2026-04-14 22:16:01', NULL, '2026-04-14 22:15:30', '2026-04-14 22:16:01');
 
 -- --------------------------------------------------------
 
@@ -755,6 +811,14 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `notifications_user_id_read_at_index` (`user_id`,`read_at`),
+  ADD KEY `notifications_role_created_at_index` (`role`,`created_at`);
+
+--
 -- Indexes for table `password_reset_tokens`
 --
 ALTER TABLE `password_reset_tokens`
@@ -872,7 +936,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -890,7 +954,7 @@ ALTER TABLE `curriculum`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `faculty`
@@ -920,13 +984,19 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `sections`
@@ -1012,6 +1082,12 @@ ALTER TABLE `faculty_assignments`
   ADD CONSTRAINT `faculty_assignments_faculty_id_foreign` FOREIGN KEY (`faculty_id`) REFERENCES `faculty` (`id`),
   ADD CONSTRAINT `faculty_assignments_section_id_foreign` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`),
   ADD CONSTRAINT `faculty_assignments_subject_id_foreign` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`);
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `sections`

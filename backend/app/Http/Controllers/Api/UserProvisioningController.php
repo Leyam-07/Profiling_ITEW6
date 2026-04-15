@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Support\Audit;
+use App\Support\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -59,6 +60,9 @@ class UserProvisioningController extends Controller
         ]);
 
         Audit::log($request->user(), 'create_faculty', ['faculty_user_id' => $user->id, 'faculty_id' => $faculty->id]);
+
+        // Notify dean about new faculty member
+        NotificationService::notifyDeanNewFaculty($userName, $department);
 
         return response()->json([
             'user' => [
@@ -135,6 +139,12 @@ class UserProvisioningController extends Controller
         ]);
 
         Audit::log($request->user(), 'create_student', ['student_user_id' => $user->id, 'student_id' => $student->id]);
+
+        // Notify dean about new student enrollment
+        $course = \App\Models\Course::find($validated['course_id']);
+        if ($course) {
+            NotificationService::notifyDeanNewStudent($userName, $course->course_name);
+        }
 
         return response()->json([
             'user' => [

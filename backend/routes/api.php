@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\SkillMasterController;
 use App\Http\Controllers\Api\SectionController;
 use App\Http\Controllers\Api\CurriculumController;
 use App\Http\Controllers\Api\FacultyAssignmentController;
+use App\Http\Controllers\Api\NotificationController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/login/avatar-preview', [AuthController::class, 'loginAvatarPreview']);
@@ -36,6 +37,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard/faculty', [DashboardController::class, 'faculty'])->middleware('role:faculty');
     Route::get('/dashboard/student', [DashboardController::class, 'student'])->middleware('role:student');
     Route::get('/search', [DashboardController::class, 'search']);
+
+    /*
+     * Notifications (available to all authenticated users)
+     */
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount']);
+    Route::get('/notifications/system', [NotificationController::class, 'getSystemNotifications']);
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::delete('/notifications/{id}', [NotificationController::class, 'deleteNotification']);
+    Route::post('/notifications', [NotificationController::class, 'createSystemNotification'])->middleware('role:dean');
 
     /*
      * Provisioning endpoints (create both user + domain record).

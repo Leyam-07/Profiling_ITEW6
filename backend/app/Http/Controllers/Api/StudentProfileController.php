@@ -12,6 +12,7 @@ use App\Models\StudentMedicalHistory;
 use App\Models\StudentNonAcademicHistory;
 use App\Models\StudentSkill;
 use App\Models\StudentViolation;
+use App\Support\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -199,6 +200,13 @@ class StudentProfileController extends Controller
                     'clearance_status' => $row['clearance_status'],
                     'description' => $row['description'] ?? null,
                 ]);
+                
+                // Notify student about new violation
+                NotificationService::notifyViolation(
+                    $student->id,
+                    $row['violation_type'],
+                    $row['severity_level']
+                );
             }
         });
 

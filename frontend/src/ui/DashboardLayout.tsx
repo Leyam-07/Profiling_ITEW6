@@ -15,6 +15,7 @@ import {
   type Role,
   type UpdateMyProfilePayload,
 } from "./auth";
+import { NotificationBell } from "./components/NotificationBell";
 
 function maskEmail(email: string) {
   const at = email.indexOf("@");
@@ -110,7 +111,6 @@ export function DashboardLayout({
     faculty: any[];
     subjects: any[];
   } | null>(null);
-  const [notifOpen, setNotifOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [updateProfileOpen, setUpdateProfileOpen] = useState(false);
   const [profilePickPreview, setProfilePickPreview] = useState<string | null>(
@@ -131,7 +131,6 @@ export function DashboardLayout({
   const [profileUploadError, setProfileUploadError] = useState<string | null>(
     null,
   );
-  const notifWrapRef = useRef<HTMLDivElement>(null);
   const profileWrapRef = useRef<HTMLDivElement>(null);
   const profileFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -142,17 +141,15 @@ export function DashboardLayout({
   }, []);
 
   useEffect(() => {
-    if (!notifOpen && !profileMenuOpen) return;
+    if (!profileMenuOpen) return;
     function onDocMouseDown(e: MouseEvent) {
       const t = e.target as Node;
-      if (notifWrapRef.current?.contains(t)) return;
       if (profileWrapRef.current?.contains(t)) return;
-      setNotifOpen(false);
       setProfileMenuOpen(false);
     }
     document.addEventListener("mousedown", onDocMouseDown);
     return () => document.removeEventListener("mousedown", onDocMouseDown);
-  }, [notifOpen, profileMenuOpen]);
+  }, [profileMenuOpen]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -166,7 +163,6 @@ export function DashboardLayout({
         setUpdateProfileOpen(false);
         return;
       }
-      setNotifOpen(false);
       setProfileMenuOpen(false);
     }
     document.addEventListener("keydown", onKey);
@@ -502,44 +498,7 @@ export function DashboardLayout({
             ) : null}
 
             <div className="header-actions">
-              <div className="header-notif-wrap" ref={notifWrapRef}>
-                <button
-                  type="button"
-                  className="header-icon-btn"
-                  aria-label="Notifications"
-                  aria-expanded={notifOpen}
-                  onClick={() => {
-                    setNotifOpen((v) => !v);
-                    setProfileMenuOpen(false);
-                  }}
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-                {notifOpen ? (
-                  <div
-                    className="header-dropdown header-dropdown--notif"
-                    role="dialog"
-                    aria-label="Notifications"
-                  >
-                    <p className="header-dropdown-empty">
-                      No new notifications
-                    </p>
-                  </div>
-                ) : null}
-              </div>
+              <NotificationBell />
 
               <div className="header-profile-wrap" ref={profileWrapRef}>
                 <button
@@ -550,7 +509,6 @@ export function DashboardLayout({
                   aria-haspopup="menu"
                   onClick={() => {
                     setProfileMenuOpen((v) => !v);
-                    setNotifOpen(false);
                   }}
                 >
                   <div
